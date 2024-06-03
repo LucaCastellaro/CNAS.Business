@@ -30,4 +30,20 @@ The nuget package will be publicly deployed on the nuget store.
 
 ### Usage
 
-*Instructions on how to import and work with this library will follow...*
+#### Register in Program.cs
+``` c#
+using CNAS.Business.Extensions;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddLogging();
+
+// Add your handlers, using "Program" as marker.
+builder.Services.AddMediator<Program>();
+
+// Add the generic validation behavior to the pipeline.
+builder.Services.AddBehaviors();
+
+// Add any custom validator that you may add, using "Program" as marker.
+builder.Services.AddValidators<Program>();
+```
