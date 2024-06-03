@@ -25,7 +25,7 @@ The nuget package will be publicly deployed on the nuget store.
 ## How
 
 ### Install
-1. Search for "CNAS.Presentation" in the nuget store
+1. Search for "CNAS.Business" in the nuget store
 2. Install said nuget
 
 ### Usage
