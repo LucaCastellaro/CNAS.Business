@@ -31,6 +31,7 @@ The nuget package will be publicly deployed on the nuget store.
 ### Usage
 
 #### Register in Program.cs
+
 ``` c#
 using CNAS.Business.Extensions;
 
@@ -46,4 +47,55 @@ builder.Services.AddBehaviors();
 
 // Add any custom validator that you may add, using "Program" as marker.
 builder.Services.AddValidators<Program>();
+```
+
+#### Create a handler
+
+In order to create a handler, you first need to create a response and a request.
+
+I like to have these 3 classes in the same file, for easy debugging.
+
+
+
+``` c#
+using CNAS.Business.Handlers;
+using CNAS.Business.Models;
+using Microsoft.Extensions.Logging;
+
+// The response must inherit from BaseResponse<TData>.
+// In this case, the "Data" property will be of type int.
+public sealed record GetDataResponse : BaseResponse<int>;
+
+// Request are divided in queries and commands. 
+// Queries are for reading data, while Commands are for writing data.
+// Both of them must inherit from BaseRequest<TResponse>.
+public sealed record GetDataQuery : BaseRequest<GetDataResponse>
+{
+    public required int Value { get; init; }
+    public bool? Throw { get; init; }
+}
+
+// The handler must inherit from BaseHandler<GetDataQuery, GetDataResponse>.
+// The base abstract class has a required field for the logger, which you must inject.
+public sealed class GetDataHandler : BaseHandler<GetDataQuery, GetDataResponse>
+{
+    public GetDataHandler(ILogger<GetDataHandler> logger) : base(logger)
+    {
+    }
+
+    public override Task<GetDataResponse> Handle(GetDataQuery req, CancellationToken ct)
+    {
+        if (req.Throw == true)
+        {
+            throw new NotImplementedException();
+        }
+
+        return Task.FromResult(
+            new GetDataResponse
+            {
+                Data = req.Value
+            }
+        );
+    }
+}
 ```
