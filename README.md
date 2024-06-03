@@ -55,8 +55,6 @@ In order to create a handler, you first need to create a response and a request.
 
 I like to have these 3 classes in the same file, for easy debugging.
 
-
-
 ``` c#
 using CNAS.Business.Handlers;
 using CNAS.Business.Models;
@@ -96,6 +94,33 @@ public sealed class GetDataHandler : BaseHandler<GetDataQuery, GetDataResponse>
                 Data = req.Value
             }
         );
+    }
+}
+```
+
+#### Create a validator
+
+`FluentValidation` is used to write validators. I didn't write a wrapper around it, but in future I think i will.
+
+I like to also put this class in the handler file.
+
+I suggest doing so only if the validator is small and doesn't have a lot of logic inside.
+
+Following this rule I could've put this in the class above, but i wanted to have an example of having it separated.
+
+``` c#
+using CNAS.Business.Test.Handlers.Queries;
+using FluentValidation;
+
+public sealed class GetDataValidator : AbstractValidator<GetDataQuery>
+{
+    public GetDataValidator()
+    {
+        RuleFor(xx => xx.Value)
+            .Cascade(CascadeMode.Stop)
+            .NotNull()
+            .GreaterThan(1)
+            ;
     }
 }
 ```
