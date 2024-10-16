@@ -3,6 +3,7 @@ using CNAS.Business.Test.Handlers.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 
 namespace CNAS.Business.Test;
 
@@ -13,9 +14,11 @@ public class UnitTest
     {
         var builder = WebApplication.CreateBuilder();
 
-        builder.Services.AddLogging()
-            .AddMediator<UnitTest>()
-            ;
+        builder.Host.UseSerilog((_, config) => {
+            config.WriteTo.Console();
+        });
+
+        builder.Services.AddMediator<UnitTest>();
 
         var app = builder.Build();
 
@@ -30,15 +33,21 @@ public class UnitTest
     }
 
     [Fact]
-    public async Task AddValidators()
+    public async Task Configure()
     {
         var builder = WebApplication.CreateBuilder();
 
-        builder.Services.AddLogging()
+        builder.Host.UseSerilog((_, config) => {
+            config.WriteTo.Console();
+        });
+
+        builder.Services
             .AddMediator<UnitTest>()
             .AddBehaviors()
             .AddValidators<UnitTest>()
             ;
+
+        builder.Host.UseSerilog();
 
         var app = builder.Build();
 
