@@ -1,6 +1,6 @@
 ﻿using CNAS.Business.Handlers;
 using CNAS.Business.Models;
-using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace CNAS.Business.Test.Handlers.Queries;
 
@@ -14,7 +14,7 @@ internal sealed record GetDataQuery : BaseRequest<GetDataResponse>
 
 internal sealed class GetDataHandler : BaseHandler<GetDataQuery, GetDataResponse>
 {
-    public GetDataHandler(ILogger<GetDataHandler> logger) : base(logger)
+    public GetDataHandler(ILogger logger) : base(logger)
     {
     }
 

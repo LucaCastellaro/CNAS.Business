@@ -1,6 +1,6 @@
 ﻿using CNAS.Business.Models;
 using MediatR.Pipeline;
-using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace CNAS.Business.Handlers;
 
@@ -15,13 +15,13 @@ public sealed class ExceptionHandler<TRequest, TResponse, TException> : IRequest
     where TResponse : BaseError
     where TException : Exception
 {
-    private readonly ILogger<ExceptionHandler<TRequest, TResponse, TException>> _logger;
+    private readonly ILogger _logger;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="ExceptionHandler{TRequest, TResponse, TException}"/> class.
     /// </summary>
     /// <param name="logger">The logger.</param>
-    public ExceptionHandler(ILogger<ExceptionHandler<TRequest, TResponse, TException>> logger)
+    public ExceptionHandler(ILogger logger)
     {
         _logger = logger;
     }
@@ -37,7 +37,7 @@ public sealed class ExceptionHandler<TRequest, TResponse, TException> : IRequest
     public Task Handle(TRequest request, TException exception, RequestExceptionHandlerState<TResponse> state,
         CancellationToken cancellationToken)
     {
-        _logger.LogCritical(exception, "Something went wrong while handling request of type {requestType}", typeof(TRequest).Name);
+        _logger.Fatal(exception, "Something went wrong while handling request of type {requestType}", typeof(TRequest).Name);
         var response = new BaseError
         {
             Errors = [exception.Message],

@@ -77,7 +77,7 @@ public sealed record GetDataQuery : BaseRequest<GetDataResponse>
 // The base abstract class has a required field for the logger, which you must inject.
 public sealed class GetDataHandler : BaseHandler<GetDataQuery, GetDataResponse>
 {
-    public GetDataHandler(ILogger<GetDataHandler> logger) : base(logger)
+    public GetDataHandler(ILogger logger) : base(logger)
     {
     }
 

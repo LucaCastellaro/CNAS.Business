@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using Microsoft.Extensions.Logging;
+using Serilog;
 
 namespace CNAS.Business.Handlers;
 
@@ -15,13 +15,13 @@ public abstract class BaseHandler<TRequest, TResponse> : IRequestHandler<TReques
     /// <summary>
     /// The logger.
     /// </summary>
-    protected readonly ILogger<BaseHandler<TRequest, TResponse>> _logger;
+    protected readonly ILogger _logger;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="BaseHandler{TRequest, TResponse}"/> class.
     /// </summary>
     /// <param name="logger">The logger.</param>
-    protected BaseHandler(ILogger<BaseHandler<TRequest, TResponse>> logger)
+    protected BaseHandler(ILogger logger)
     {
         _logger = logger;
     }
